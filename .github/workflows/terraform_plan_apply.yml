@@ -41,7 +41,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: tfplan
-        path: tfplan
+        path: ./tfplan
 
   terraform-apply:
     name: 'Terraform apply'
@@ -62,7 +62,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: tfplan
-          path: .
+          path: ./tfplan
 
       - name: Terraform Apply
         run: terraform apply -auto-approve -tfplan
