@@ -18,12 +18,12 @@ resource "random_integer" "ri" {
 }
 
 resource "azurerm_resource_group" "taskboardResourceGroup" {
-  name     = var.resource_group_name
+  name     = "${var.resource_group_name}${random_integer.ri.result}"
   location = var.resource_group_location
 }
 
 resource "azurerm_service_plan" "taskboardappsp" {
-  name                = var.app_service_plan_name
+  name                = "${var.app_service_plan_name}${random_integer.ri.result}"
   resource_group_name = azurerm_resource_group.taskboardResourceGroup.name
   location            = azurerm_resource_group.taskboardResourceGroup.location
   os_type             = "Linux"
@@ -31,7 +31,7 @@ resource "azurerm_service_plan" "taskboardappsp" {
 }
 
 resource "azurerm_linux_web_app" "taskboardevgeni" {
-  name                = var.app_service_name
+  name                = "${var.app_service_name}${random_integer.ri.result}"
   resource_group_name = azurerm_resource_group.taskboardResourceGroup.name
   location            = azurerm_service_plan.taskboardappsp.location
   service_plan_id     = azurerm_service_plan.taskboardappsp.id
@@ -57,7 +57,7 @@ resource "azurerm_app_service_source_control" "evgenigithub" {
 }
 
 resource "azurerm_mssql_server" "evgenisqlserver" {
-  name                         = var.sql_server_name
+  name                         = "${var.sql_server_name}${random_integer.ri.result}"
   resource_group_name          = azurerm_resource_group.taskboardResourceGroup.name
   location                     = azurerm_resource_group.taskboardResourceGroup.location
   version                      = "12.0"
@@ -66,7 +66,7 @@ resource "azurerm_mssql_server" "evgenisqlserver" {
 }
 
 resource "azurerm_mssql_database" "evgenidb" {
-  name           = var.sql_database_name
+  name           = "${var.sql_database_name}${random_integer.ri.result}"
   server_id      = azurerm_mssql_server.evgenisqlserver.id
   collation      = "SQL_Latin1_General_CP1_CI_AS"
   license_type   = "LicenseIncluded"
